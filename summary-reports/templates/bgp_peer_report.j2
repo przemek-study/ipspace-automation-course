@@ -1,0 +1,48 @@
+===========================================================================
+========== BGP peerings report for: {{ inventory_hostname }} ============
+===========================================================================
+
+{% for peer, pdata in bgp_peers.iteritems() %}
+=======================================================
+============= Peer: {{ peer }} ==============
+=======================================================
+
+Peer AS: {{ pdata.asn }}
+Status: {{ pdata.peerState }}
+Number of routes received from the peer: {{ pdata.prefixReceived }}
+Number or routes accepted from the peer: {{ pdata.prefixAccepted }}
+
+
+ {% for result in bgp_peer_rcv.results %}
+  {% if result.item == peer %}
+
+=========== Prefixes received =================
+  {% for pfx, pfxdata in result.stdout.0.vrfs.default.bgpRouteEntries.iteritems() %}
+- Prefix: {{ pfx }}, Next Hop: {{ pfxdata.bgpRoutePaths.0.nextHop }} , AS Path: {{ pfxdata.bgpRoutePaths.0.asPathEntry.asPath }}
+  {% endfor %}
+
+  {% endif %}
+ {% endfor %}
+
+ {% for result in bgp_peer_acc.results %}
+  {% if result.item == peer %}
+
+=========== Prefixes accepted =================
+  {% for pfx, pfxdata in result.stdout.0.vrfs.default.bgpRouteEntries.iteritems() %}
+- Prefix: {{ pfx }}, Next Hop: {{ pfxdata.bgpRoutePaths.0.nextHop }} , AS Path: {{ pfxdata.bgpRoutePaths.0.asPathEntry.asPath }}
+  {% endfor %}
+
+  {% endif %}
+ {% endfor %}
+
+ {% for result in bgp_peer_adv.results %}
+  {% if result.item == peer %}
+
+=========== Prefixes advertised =================
+  {% for pfx, pfxdata in result.stdout.0.vrfs.default.bgpRouteEntries.iteritems() %}
+- Prefix: {{ pfx }}, Next Hop: {{ pfxdata.bgpRoutePaths.0.nextHop }} , AS Path: {{ pfxdata.bgpRoutePaths.0.asPathEntry.asPath }}
+  {% endfor %}
+
+  {% endif %}
+ {% endfor %}
+{% endfor %}

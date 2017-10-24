@@ -1,0 +1,38 @@
+===========================================================================
+========== BGP peerings report for: vEOS-03 ============
+===========================================================================
+
+=======================================================
+============= Peer: 10.0.13.1 ==============
+=======================================================
+
+Peer AS: 65001
+Status: Established
+Number of routes received from the peer: 4
+Number or routes accepted from the peer: 4
+
+
+   
+=========== Prefixes received =================
+  - Prefix: 192.168.0.0/24, Next Hop: 10.0.13.1 , AS Path: i Or-ID: 192.168.0.1 C-LST: 10.0.13.1
+  - Prefix: 192.168.2.0/24, Next Hop: 10.0.13.1 , AS Path: i Or-ID: 192.168.0.1 C-LST: 10.0.13.1
+  - Prefix: 192.168.1.0/24, Next Hop: 10.0.13.1 , AS Path: i Or-ID: 192.168.0.1 C-LST: 10.0.13.1
+  - Prefix: 192.168.3.0/24, Next Hop: 10.0.13.1 , AS Path: i Or-ID: 192.168.0.1 C-LST: 10.0.13.1
+  
+   
+   
+=========== Prefixes accepted =================
+  - Prefix: 192.168.0.0/24, Next Hop: 10.0.13.1 , AS Path: i Or-ID: 192.168.0.1 C-LST: 10.0.13.1
+  - Prefix: 192.168.2.0/24, Next Hop: 10.0.13.1 , AS Path: i Or-ID: 192.168.0.1 C-LST: 10.0.13.1
+  - Prefix: 192.168.1.0/24, Next Hop: 10.0.13.1 , AS Path: i Or-ID: 192.168.0.1 C-LST: 10.0.13.1
+  - Prefix: 192.168.3.0/24, Next Hop: 10.0.13.1 , AS Path: i Or-ID: 192.168.0.1 C-LST: 10.0.13.1
+  
+   
+   
+=========== Prefixes advertised =================
+  - Prefix: 192.168.7.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  - Prefix: 192.168.4.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  - Prefix: 192.168.6.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  - Prefix: 192.168.5.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  
+   

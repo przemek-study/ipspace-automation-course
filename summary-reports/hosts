@@ -1,0 +1,12 @@
+[arista]
+vEOS-01 ansible_host=10.50.0.2
+vEOS-02 ansible_host=10.50.0.3
+vEOS-03 ansible_host=10.50.0.4
+
+[cisco]
+CSR-01 ansible_host=10.50.0.11
+CSR-02 ansible_host=10.50.0.12
+
+[all:vars]
+ansible_user=ansible
+ansible_ssh_pass=ansible

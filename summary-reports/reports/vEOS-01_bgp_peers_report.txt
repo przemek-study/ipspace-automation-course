@@ -1,0 +1,92 @@
+===========================================================================
+========== BGP peerings report for: vEOS-01 ============
+===========================================================================
+
+=======================================================
+============= Peer: 10.0.13.2 ==============
+=======================================================
+
+Peer AS: 65001
+Status: Established
+Number of routes received from the peer: 4
+Number or routes accepted from the peer: 4
+
+
+   
+=========== Prefixes received =================
+  - Prefix: 192.168.7.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  - Prefix: 192.168.4.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  - Prefix: 192.168.6.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  - Prefix: 192.168.5.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  
+         
+   
+=========== Prefixes accepted =================
+  - Prefix: 192.168.7.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  - Prefix: 192.168.4.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  - Prefix: 192.168.6.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  - Prefix: 192.168.5.0/24, Next Hop: 10.0.13.2 , AS Path: i
+  
+         
+   
+=========== Prefixes advertised =================
+  - Prefix: 192.168.0.0/24, Next Hop: 10.0.13.1 , AS Path: i
+  - Prefix: 192.168.2.0/24, Next Hop: 10.0.13.1 , AS Path: i
+  - Prefix: 192.168.1.0/24, Next Hop: 10.0.13.1 , AS Path: i
+  - Prefix: 192.168.3.0/24, Next Hop: 10.0.13.1 , AS Path: i
+  
+         =======================================================
+============= Peer: 10.0.12.2 ==============
+=======================================================
+
+Peer AS: 65001
+Status: Established
+Number of routes received from the peer: 4
+Number or routes accepted from the peer: 4
+
+
+      
+=========== Prefixes received =================
+  - Prefix: 192.168.0.0/24, Next Hop: 10.0.12.2 , AS Path: i
+  - Prefix: 192.168.2.0/24, Next Hop: 10.0.12.2 , AS Path: i
+  - Prefix: 192.168.1.0/24, Next Hop: 10.0.12.2 , AS Path: i
+  - Prefix: 192.168.3.0/24, Next Hop: 10.0.12.2 , AS Path: i
+  
+      
+      
+=========== Prefixes accepted =================
+  - Prefix: 192.168.0.0/24, Next Hop: 10.0.12.2 , AS Path: i
+  - Prefix: 192.168.2.0/24, Next Hop: 10.0.12.2 , AS Path: i
+  - Prefix: 192.168.1.0/24, Next Hop: 10.0.12.2 , AS Path: i
+  - Prefix: 192.168.3.0/24, Next Hop: 10.0.12.2 , AS Path: i
+  
+      
+      
+=========== Prefixes advertised =================
+  - Prefix: 192.168.7.0/24, Next Hop: 10.0.12.1 , AS Path: i
+  - Prefix: 192.168.4.0/24, Next Hop: 10.0.12.1 , AS Path: i
+  - Prefix: 192.168.6.0/24, Next Hop: 10.0.12.1 , AS Path: i
+  - Prefix: 192.168.5.0/24, Next Hop: 10.0.12.1 , AS Path: i
+  
+      =======================================================
+============= Peer: 10.1.11.2 ==============
+=======================================================
+
+Peer AS: 65101
+Status: Idle
+Number of routes received from the peer: 0
+Number or routes accepted from the peer: 0
+
+
+         
+=========== Prefixes received =================
+  
+   
+         
+=========== Prefixes accepted =================
+  
+   
+         
+=========== Prefixes advertised =================
+  
+   

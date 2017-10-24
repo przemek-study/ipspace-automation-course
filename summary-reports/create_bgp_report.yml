@@ -1,0 +1,47 @@
+---
+- hosts: arista
+  connection: local
+
+  tasks:
+
+  - name: Get bgp peers
+    eos_command:
+     commands:
+      - sh ip bgp sum | json
+    register: bgp_sum
+
+  - name: Store bgp pers in a variable *bgp_peers*
+    set_fact:
+     bgp_peers: "{{ bgp_sum.stdout.0.vrfs.default.peers }}"
+
+  - name: Debug *bgp_peers* variable
+    debug:
+     msg: "{{ bgp_peers }}"
+
+  - name: Retrieve routes received from each peer
+    eos_command:
+     commands:
+      - sh ip bgp neighbors {{ item }} received-routes | json
+     authorize: yes
+    with_items: "{{ bgp_sum.stdout.0.vrfs.default.peers }}"
+    register: bgp_peer_rcv
+
+  - name: Retrieve routes accepted from each peer
+    eos_command:
+     commands: 
+      - sh ip bgp neighbors {{ item }} routes | json
+    with_items: "{{ bgp_sum.stdout.0.vrfs.default.peers }}"
+    register: bgp_peer_acc
+
+
+  - name: Retrieve routes advertised to each peer
+    eos_command:
+     commands:
+      - sh ip bgp neighbors {{ item }} advertised | json
+    with_items: "{{ bgp_sum.stdout.0.vrfs.default.peers }}"
+    register: bgp_peer_adv
+
+  - name: Generate report
+    template:
+     src: "bgp_peer_report.j2"
+     dest: "reports/{{inventory_hostname}}_bgp_peers_report.txt"
