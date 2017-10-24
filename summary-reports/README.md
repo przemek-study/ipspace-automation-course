@@ -19,7 +19,7 @@ A few example reports can be found in "reports".
 Also, one full example report is included below:
 
 
-'''
+```
 ===========================================================================
 ========== BGP peerings report for: vEOS-02 ============
 ===========================================================================
@@ -56,6 +56,6 @@ Number or routes accepted from the peer: 4
   - Prefix: 192.168.2.0/24, Next Hop: 10.0.12.2 , AS Path: i
   - Prefix: 192.168.1.0/24, Next Hop: 10.0.12.2 , AS Path: i
   - Prefix: 192.168.3.0/24, Next Hop: 10.0.12.2 , AS Path: i
-'''
+````
 
 # ipspace-automation-course
