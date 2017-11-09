@@ -26,7 +26,7 @@ __ports__ a list of interfaces, each item holds interface _name_, _ip_, _speed_,
 __trunks__ if present, contains trunk interfaces, their native vlans and a list of allowed vlans  
 __mlag__ if present, contains _peer_, _ip_ and _port_, used to configure MLAG  
 
-
+---
 
 **VLAN service data model** is stored in the "vlan_service.yml" file.
 
