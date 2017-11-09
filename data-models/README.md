@@ -14,27 +14,19 @@ These playbooks use JINJA2 templates to translate node and vlan service data mod
 
 **Node data model** is stored per host in the *host_vars* directory. Each node model contains the following elements:
 
-__mgmt__ - IP/Prefix to be assigned to the management interface (Ma1)
+__mgmt__ - IP/Prefix to be assigned to the management interface (Ma1)  
+__loop__ - IP to be assigned to the loopback interface (Lo0)  
+__mc__ - boolean value, enables/disables multicast routing on the node  
+__as__ - value used for the BGP ASN  
+__ibgp__ - a list of the iBGP peers, each item holds *peer* name and its *ip*  
+__ospf__ - boolean value, enables/disables OSPF routing on the node  
+__rp__ - boolean value, if present, makes this node a PIM RP  
+__pim__ a list of interfaces on which to enable PIM-SM  
+__ports__ a list of interfaces, each item holds interface _name_, _ip_, _speed_, _desc_, and whether it's _ospf_ enabled  
+__trunks__ if present, contains trunk interfaces, their native vlans and a list of allowed vlans  
+__mlag__ if present, contains _peer_, _ip_ and _port_, used to configure MLAG  
 
-__loop__ - IP to be assigned to the loopback interface (Lo0)
 
-__mc__ - boolean value, enables/disables multicast routing on the node
-
-__as__ - value used for the BGP ASN
-
-__ibgp__ - a list of the iBGP peers, each item holds *peer* name and its *ip*
-
-__ospf__ - boolean value, enables/disables OSPF routing on the node
-
-__rp__ - boolean value, if present, makes this node a PIM RP
-
-__pim__ a list of interfaces on which to enable PIM-SM
-
-__ports__ a list of interfaces, each item holds interface _name_, _ip_, _speed_, _desc_, and whether it's _ospf_ enabled
-
-__trunks__ if present, contains trunk interfaces, their native vlans and a list of allowed vlans
-
-__mlag__ if present, contains _peer_, _ip_ and _port_, used to configure MLAG
 
 **VLAN service data model** is stored in the "vlan_service.yml" file.
 
