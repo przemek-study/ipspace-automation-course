@@ -1,0 +1,19 @@
+---
+- hosts: arista
+  connection: local
+
+  tasks:
+
+  - name: Load service definitons
+    include_vars:
+     file: vlan_service.yml
+     name: services
+
+  - name: Create dir for the node
+    local_action: file path=configs/{{ inventory_hostname }} state=directory
+    changed_when: no
+
+  - name: Generate service config
+    template:
+     src: "build_vlan_service.j2"
+     dest: "configs/{{inventory_hostname}}/10-{{inventory_hostname}}-vlan-service.txt"

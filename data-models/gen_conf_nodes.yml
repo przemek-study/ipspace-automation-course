@@ -1,0 +1,14 @@
+---
+- hosts: arista
+  connection: local
+
+  tasks:
+
+  - name: Create dir for the node
+    local_action: file path=configs/{{ inventory_hostname }} state=directory
+    changed_when: no
+
+  - name: Generate report
+    template:
+     src: "build_nodes.j2"
+     dest: "configs/{{inventory_hostname}}/01-{{inventory_hostname}}-node.txt"

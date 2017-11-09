@@ -1,0 +1,69 @@
+hostname vEOS-03
+
+ip multicast-routing
+
+ip domain-name lab
+ip name-server 10.8.8.8
+ip name-server 10.8.4.4
+
+ntp server 10.50.123.1
+ntp server 10.50.123.2
+
+snmp-server community SNMPCOMM ro
+snmp host 10.50.2.100 SNMPCOMM
+snmp host 10.50.2.101 SNMPCOMM
+
+interface Management1
+ ip address 10.50.0.4/24
+ no shut
+
+interface Loopback0
+ ip address 10.50.255.3
+
+interface Ethernet1
+ description vEOS-01 Uplink
+ no switchport
+ ip address 10.0.13.1/24
+ speed 1G
+ ip pim sparse-mode
+
+interface Ethernet2
+ description vEOS-03 Uplink
+ no switchport
+ ip address 
+ speed 1G
+
+interface Ethernet2
+ switchport
+ switchport mode trunk
+ switchport trunk native vlan 4094
+ switchport trunk allowed vlan 4094
+
+router bgp 65001
+ router-id 10.50.255.3
+ network 10.50.255.3/32
+ neighbor 10.0.12.1 remote-as 65001
+ neighbor 10.0.12.1 description vEOS-1
+
+router ospf 1
+ router-id 10.50.255.3
+ network 10.50.255.3/32 area 0
+ network 10.0.13.0/24 area 0
+ network False area 0
+
+
+vlan 4094
+ name MLAG VLAN
+
+no spanning-tree vlan 4094
+
+interface vlan 4094
+ description vEOS-03_vEOS-02 MLAG
+ ip address 10.0.0.2/30/30
+
+mlag
+ local-interface vlan 4094
+ peer-address 10.0.0.1/30
+ domain vEOS-03_vEOS-02
+ peer-link Ethernet2
+

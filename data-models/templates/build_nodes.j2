@@ -1,0 +1,106 @@
+hostname {{ inventory_hostname }}
+
+{% if mc %}
+ip multicast-routing
+{% endif %}
+
+ip domain-name {{ common.dns.domain }}
+{% for srv in common.dns.servers %}
+ip name-server {{ srv }}
+{% endfor %}
+
+{% for srv in common.ntp.servers %}
+ntp server {{ srv }}
+{% endfor %}
+
+snmp-server community {{ common.snmp.community }} ro
+{% for srv in common.snmp.servers %}
+snmp host {{ srv }} {{ common.snmp.community }}
+{% endfor %}
+
+{# ==Configure mgmt and loopback== #}
+interface Management1
+ ip address {{ mgmt }}
+ no shut
+
+interface Loopback0
+ ip address {{ loop }}
+
+{# ==Configure ports== #}
+{% for port in ports %}
+interface {{ port.name }}
+ description {{ port.desc }}
+ no switchport
+ ip address {{ port.ip }}
+ speed {{ port.speed }}
+{%  if mc and port.name in pim %}
+ ip pim sparse-mode
+
+{%  endif %}
+{% endfor %}
+
+{# ==Configure trunks== #}
+{% if trunks is defined %}
+{%  for t, td in trunks.iteritems() %}
+interface {{ t }}
+ switchport
+ switchport mode trunk
+ switchport trunk native vlan {{ td.native }}
+ switchport trunk allowed vlan {{ td.allowed|join(',') }}
+{%  endfor %}
+{% endif %}
+
+{# ==Configure BGP== #}
+router bgp {{ as }}
+ router-id {{ loop }}
+ network {{ loop }}/32
+{% if rr %}
+ neighbor LEAF peer-group
+ neighbor LEAF remote-as {{ as }}
+ neighbor LEAF next-hop-self
+ neighbor LEAF route-reflector-client
+{% endif %}
+{% if ibgp is defined %}
+{%  for p in ibgp %}
+{%   if rr %}
+ neighbor {{ p.ip }} peer-group LEAF
+{%   else %}
+ neighbor {{ p.ip }} remote-as {{ as }}
+{%   endif %}
+ neighbor {{ p.ip }} description {{ p.peer }}
+{%  endfor %}
+{% endif %}
+
+{# ==Configure OSPF== #}
+router ospf 1
+ router-id {{ loop }}
+ network {{ loop }}/32 area 0
+{% for p in ports %}
+{%  if p.ospf %}
+ network {{ p.ip | ipaddr('network/prefix') }} area 0
+{%  endif %}
+{% endfor %}
+
+{# ==Configure RP== #}
+{% if rp is defined %}
+ip pim rp-address {{ loop }}
+{% endif %}
+
+{# ==MLAG Config== #}
+{% if mlag is defined %}
+vlan 4094
+ name MLAG VLAN
+
+no spanning-tree vlan 4094
+
+interface vlan 4094
+ description {{ inventory_hostname }}_{{ mlag.peer }} MLAG
+ ip address {{ mlag.ip }}/30
+
+mlag
+ local-interface vlan 4094
+ peer-address {{ hostvars[mlag.peer]['mlag']['ip'] }}
+ domain {{ inventory_hostname }}_{{ mlag.peer }}
+ peer-link {{ mlag.port }}
+
+{% endif %}

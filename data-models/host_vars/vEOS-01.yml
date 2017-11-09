@@ -1,0 +1,21 @@
+---
+mgmt: 10.50.0.2/24
+loop: 10.50.255.1
+mc: yes
+as: 65001
+rr: yes
+ibgp:
+  - { peer: vEOS-2, ip: "10.0.12.2" }
+  - { peer: vEOS-3, ip: "10.0.13.2" }
+
+ospf: yes
+
+rp: yes
+
+pim:
+  - Ethernet1
+  - Ethernet2
+
+ports:
+  - {name: Ethernet1, ip: "10.0.12.1/24", speed: 1000full, desc: "vEOS-02 Uplink", ospf: yes }
+  - {name: Ethernet2, ip: "10.0.13.1/24", speed: 1000full, desc: "vEOS-03 Uplink", ospf: yes }
