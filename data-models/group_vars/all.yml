@@ -1,4 +1,7 @@
 ---
+sites:
+ ld4: { as: 65001 }
+
 common:
  ntp:
   servers:

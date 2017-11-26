@@ -1,12 +1,12 @@
 ---
+site: ld4
 mgmt: 10.50.0.2/24
 loop: 10.50.255.1
 mc: yes
-as: 65001
 rr: yes
 ibgp:
-  - { peer: vEOS-2, ip: "10.0.12.2" }
-  - { peer: vEOS-3, ip: "10.0.13.2" }
+  - { port: Ethernet1 }
+  - { port: Ethernet2 }
 
 ospf: yes
 
@@ -17,5 +17,5 @@ pim:
   - Ethernet2
 
 ports:
-  - {name: Ethernet1, ip: "10.0.12.1/24", speed: 1000full, desc: "vEOS-02 Uplink", ospf: yes }
-  - {name: Ethernet2, ip: "10.0.13.1/24", speed: 1000full, desc: "vEOS-03 Uplink", ospf: yes }
+  - { name: Ethernet1, ip: "10.0.12.1/24", speed: 1000full, desc: "vEOS-02 Uplink", ospf: yes, peer: vEOS-02 }
+  - { name: Ethernet2, ip: "10.0.13.1/24", speed: 1000full, desc: "vEOS-03 Uplink", ospf: yes, peer: vEOS-03 }

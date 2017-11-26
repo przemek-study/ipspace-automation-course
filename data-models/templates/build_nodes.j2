@@ -35,9 +35,8 @@ interface {{ port.name }}
  speed {{ port.speed }}
 {%  if mc and port.name in pim %}
  ip pim sparse-mode
-
 {%  endif %}
-{% endfor %}
+{% endfor -%}
 
 {# ==Configure trunks== #}
 {% if trunks is defined %}
@@ -51,23 +50,26 @@ interface {{ t }}
 {% endif %}
 
 {# ==Configure BGP== #}
-router bgp {{ as }}
+router bgp {{ sites[site].as }}
  router-id {{ loop }}
  network {{ loop }}/32
 {% if rr %}
  neighbor LEAF peer-group
- neighbor LEAF remote-as {{ as }}
+ neighbor LEAF remote-as {{ sites[site].as }}
  neighbor LEAF next-hop-self
  neighbor LEAF route-reflector-client
 {% endif %}
 {% if ibgp is defined %}
 {%  for p in ibgp %}
+{% set jq = "[?name=='" + p.port + "'].{ myip: ip, peer: peer }" %}
+{% set el = ports | json_query(jq) %}
+{% set peer_ip = hostvars[el.0.peer] | json_query('ports[*].ip') | ipaddr(el.0.myip) %}
 {%   if rr %}
- neighbor {{ p.ip }} peer-group LEAF
+ neighbor {{ peer_ip.0 }} peer-group LEAF
 {%   else %}
- neighbor {{ p.ip }} remote-as {{ as }}
+ neighbor {{ peer_ip.0 }} remote-as {{ sites[site].as }}
 {%   endif %}
- neighbor {{ p.ip }} description {{ p.peer }}
+ neighbor {{ peer_ip.0 }} description {{ el.0.peer }}
 {%  endfor %}
 {% endif %}
 
@@ -88,19 +90,20 @@ ip pim rp-address {{ loop }}
 
 {# ==MLAG Config== #}
 {% if mlag is defined %}
+{% set jq = "[?name=='" + mlag.port + "'].{ peer: peer }" %}
+{% set mlq = ports | json_query(jq) %}
 vlan 4094
  name MLAG VLAN
 
 no spanning-tree vlan 4094
 
 interface vlan 4094
- description {{ inventory_hostname }}_{{ mlag.peer }} MLAG
+ description {{ inventory_hostname }}_{{ mlq.0.peer }} MLAG
  ip address {{ mlag.ip }}/30
 
 mlag
  local-interface vlan 4094
- peer-address {{ hostvars[mlag.peer]['mlag']['ip'] }}
- domain {{ inventory_hostname }}_{{ mlag.peer }}
+ peer-address {{ hostvars[mlq.0.peer]['mlag']['ip'] }}
+ domain {{ inventory_hostname }}_{{ mlq.0.peer }}
  peer-link {{ mlag.port }}
-
 {% endif %}

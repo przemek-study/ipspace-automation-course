@@ -23,16 +23,14 @@ interface Loopback0
 interface Ethernet1
  description vEOS-01 Uplink
  no switchport
- ip address 10.0.13.1/24
+ ip address 10.0.13.2/24
  speed 1G
  ip pim sparse-mode
-
 interface Ethernet2
- description vEOS-03 Uplink
+ description vEOS-02 Uplink
  no switchport
  ip address 
  speed 1G
-
 interface Ethernet2
  switchport
  switchport mode trunk
@@ -42,8 +40,8 @@ interface Ethernet2
 router bgp 65001
  router-id 10.50.255.3
  network 10.50.255.3/32
- neighbor 10.0.12.1 remote-as 65001
- neighbor 10.0.12.1 description vEOS-1
+ neighbor 10.0.13.1/24 remote-as 65001
+ neighbor 10.0.13.1/24 description vEOS-01
 
 router ospf 1
  router-id 10.50.255.3
@@ -66,4 +64,3 @@ mlag
  peer-address 10.0.0.1/30
  domain vEOS-03_vEOS-02
  peer-link Ethernet2
-
