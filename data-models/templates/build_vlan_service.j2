@@ -34,7 +34,7 @@ interface {{ mlag.port }}
 {%  endif %}
 
 {% if 'bgp' in vdata.protocols %}
-router bgp {{ as }}
+router bgp {{ sites[site].as }}
  network {{ vdata.network }}
 {% endif %}
 
