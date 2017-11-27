@@ -22,7 +22,7 @@ __ibgp__ - a list of the iBGP peers, each item holds *port* on which peer connec
 __ospf__ - boolean value, enables/disables OSPF routing on the node  
 __rp__ - boolean value, if present, makes this node a PIM RP  
 __pim__ a list of interfaces on which to enable PIM-SM  
-__ports__ a list of interfaces, each item holds interface _name_, _ip_, _speed_, _desc_, __peer__, and whether it's _ospf_ enabled  
+__ports__ a dictionary of interfaces, interface name is a key, values are its _ip_, _speed_, _desc_, __peer__, and whether it's _ospf_ enabled  
 __trunks__ if present, contains trunk interfaces, their native vlans and a list of allowed vlans  
 __mlag__ if present, contains _ip_ and _port_, used to configure MLAG  
 

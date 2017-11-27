@@ -17,5 +17,5 @@ pim:
   - Ethernet2
 
 ports:
-  - { name: Ethernet1, ip: "10.0.12.1/24", speed: 1000full, desc: "vEOS-02 Uplink", ospf: yes, peer: vEOS-02 }
-  - { name: Ethernet2, ip: "10.0.13.1/24", speed: 1000full, desc: "vEOS-03 Uplink", ospf: yes, peer: vEOS-03 }
+  Ethernet1: { ip: "10.0.12.1/24", speed: 1000full, desc: "vEOS-02 Uplink", ospf: yes, peer: vEOS-02 }
+  Ethernet2: { ip: "10.0.13.1/24", speed: 1000full, desc: "vEOS-03 Uplink", ospf: yes, peer: vEOS-03 }

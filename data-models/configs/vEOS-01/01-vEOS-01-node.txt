@@ -20,16 +20,16 @@ interface Management1
 interface Loopback0
  ip address 10.50.255.1
 
-interface Ethernet1
- description vEOS-02 Uplink
- no switchport
- ip address 10.0.12.1/24
- speed 1000full
- ip pim sparse-mode
 interface Ethernet2
  description vEOS-03 Uplink
  no switchport
  ip address 10.0.13.1/24
+ speed 1000full
+ ip pim sparse-mode
+interface Ethernet1
+ description vEOS-02 Uplink
+ no switchport
+ ip address 10.0.12.1/24
  speed 1000full
  ip pim sparse-mode
 
@@ -40,16 +40,16 @@ router bgp 65001
  neighbor LEAF remote-as 65001
  neighbor LEAF next-hop-self
  neighbor LEAF route-reflector-client
- neighbor 10.0.12.2/24 peer-group LEAF
- neighbor 10.0.12.2/24 description vEOS-02
- neighbor 10.0.13.2/24 peer-group LEAF
- neighbor 10.0.13.2/24 description vEOS-03
+ neighbor 10.0.12.2 peer-group LEAF
+ neighbor 10.0.12.2 description vEOS-02
+ neighbor 10.0.13.2 peer-group LEAF
+ neighbor 10.0.13.2 description vEOS-03
 
 router ospf 1
  router-id 10.50.255.1
  network 10.50.255.1/32 area 0
- network 10.0.12.0/24 area 0
- network 10.0.13.0/24 area 0
+ network False area 0
+ network False area 0
 
 ip pim rp-address 10.50.255.1
 
