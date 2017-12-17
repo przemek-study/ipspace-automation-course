@@ -1,6 +1,0 @@
----
-- name: Prep validation rules
-  template:
-   src: validate_service_vlan.j2
-   dest: "{{ host_tmpdir }}/validate_service_vlan.yaml"
-  changed_when: no
