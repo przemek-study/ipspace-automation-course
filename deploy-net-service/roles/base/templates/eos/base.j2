@@ -1,0 +1,115 @@
+hostname {{ inventory_hostname }}
+
+{% if mc %}
+ip multicast-routing
+{% endif %}
+
+ip domain-name {{ common.dns.domain }}
+{% for srv in common.dns.servers %}
+ip name-server {{ srv }}
+{% endfor %}
+
+{% for srv in common.ntp.servers %}
+ntp server {{ srv }}
+{% endfor %}
+
+snmp-server community {{ common.snmp.community }} ro
+{% for srv in common.snmp.servers %}
+snmp-server host {{ srv }} {{ common.snmp.community }}
+{% endfor %}
+
+{# ==Configure mgmt and loopback== #}
+interface Management1
+ ip address {{ mgmt }}
+ no shutdown
+
+interface Loopback0
+ ip address {{ loop }}/32
+
+{# ==Configure ports== #}
+{% for port, pdata in ports.iteritems() %}
+interface {{ port }}
+ description {{ pdata.desc }}
+ no switchport
+{%  if pdata.ip %}
+ ip address {{ pdata.ip }}
+{%  endif %}
+ speed {{ pdata.speed }}
+{%  if mc and port in pim %}
+ ip pim sparse-mode
+{%  endif %}
+{% endfor -%}
+
+{# ==Configure trunks== #}
+{% if trunks is defined %}
+{%  for t, td in trunks.iteritems() %}
+interface {{ t }}
+ switchport
+ switchport mode trunk
+ switchport trunk native vlan {{ td.native }}
+ switchport trunk allowed vlan {{ td.allowed|join(',') }}
+{%  endfor %}
+{% endif %}
+
+{# ==Configure BGP== #}
+router bgp {{ sites[site].as }}
+ router-id {{ loop }}
+ network {{ loop }}/32
+{% if rr %}
+ neighbor LEAF peer-group
+ neighbor LEAF remote-as {{ sites[site].as }}
+ neighbor LEAF next-hop-self
+ neighbor LEAF route-reflector-client
+{% endif %}
+{% if ibgp is defined %}
+{%  for p in ibgp %}
+{% set peer =  ports[p.port] | get_peer_info(hostvars) %}
+{%   if rr %}
+ neighbor {{ peer.ip }} peer-group LEAF
+{%   else %}
+ neighbor {{ peer.ip }} remote-as {{ sites[site].as }}
+{%   endif %}
+ neighbor {{ peer.ip }} description {{ peer.name }}
+{%  endfor %}
+ exit
+{% endif %}
+
+{# ==Configure OSPF== #}
+router ospf 1
+ router-id {{ loop }}
+ network {{ loop }}/32 area 0
+{% for port, pdata in ports.iteritems() %}
+{%  if pdata.ospf %}
+ network {{ pdata.ip | ipaddr('network/prefix') }} area 0
+{%  endif %}
+{% endfor %}
+ exit
+
+{# ==Configure RP== #}
+{% if rp is defined %}
+ip pim rp-address {{ loop }}
+{% endif %}
+
+{# ==MLAG Config== #}
+{% if mlag is defined %}
+{% set mlq = ports[mlag.port].peer %}
+{% set mlag_master = mlag.ip | ipaddr('1') %}
+vlan 4094
+ name MLAG_VLAN
+
+no spanning-tree vlan 4094
+
+interface vlan 4094
+ description {{ inventory_hostname }}_{{ mlq }} MLAG
+ ip address {{ mlag.ip }}
+
+mlag
+ local-interface vlan 4094
+ peer-address {{ hostvars[mlq]['mlag']['ip'] | ipaddr('address') }}
+{%  if mlag_master == mlag.ip %}
+ domain-id {{ inventory_hostname }}_{{ mlq }}
+{%  else %}
+ domain-id {{ mlq }}_{{ inventory_hostname }}
+{%  endif %}
+ peer-link {{ mlag.port }}
+{% endif %}

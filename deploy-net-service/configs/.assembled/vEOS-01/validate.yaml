@@ -1,0 +1,31 @@
+---
+- get_facts:
+   hostname: vEOS-01
+- get_interfaces:
+   Ethernet2:
+    description: vEOS-03 Uplink
+   Ethernet1:
+    description: vEOS-02 Uplink
+- get_interfaces_ip:
+   Ethernet2:
+    ipv4:
+     _mode: strict
+     10.0.13.1:
+      prefix_length: 24
+   Ethernet1:
+    ipv4:
+     _mode: strict
+     10.0.12.1:
+      prefix_length: 24
+- get_lldp_neighbors:
+   Ethernet2:
+    - hostname: vEOS-03
+   Ethernet1:
+    - hostname: vEOS-02
+- get_bgp_neighbors:
+   global:
+    peers:
+     10.0.12.2:
+      is_up: true
+     10.0.13.2:
+      is_up: true

@@ -1,0 +1,6 @@
+---
+- name: Prep validation rules
+  template:
+   src: val_base.j2
+   dest: "{{ host_valdir }}/val_base.yml"
+  changed_when: no

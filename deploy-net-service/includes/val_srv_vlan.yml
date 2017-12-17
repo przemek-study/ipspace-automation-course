@@ -1,0 +1,24 @@
+---
+- name: Header of the assembled yaml file
+  copy:
+   content: "---\n"
+   dest: "{{ host_valdir }}/00-val_srvc_header.yml"
+  changed_when: no
+
+- name: Prep rules for _show vlan_
+  template:
+   src: val_srvc_vlan_sh_vlan.j2
+   dest: "{{ host_valdir }}/01-val_srvc_vlan_sh_vlan.yml"
+  changed_when: no
+
+- name: Prep rules for _show int trunk_
+  template:
+   src: val_srvc_vlan_sh_int_trunk.j2
+   dest: "{{ host_valdir }}/02-val_srvc_vlan_sh_int_trunk.yml"
+  changed_when: no
+
+- name: Assemble config sections
+  assemble:
+   src: "{{ host_valdir }}/"
+   dest: "{{ host_valdir }}/val_srvc_vlan.yml"
+  changed_when: no

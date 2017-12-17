@@ -1,0 +1,15 @@
+---
+- hosts: arista
+  connection: local
+
+  vars:
+   conf_dir: "{{ playbook_dir }}/configs"
+
+  tasks:
+  - name: Prepare assembly dir var for host
+    set_fact:
+     host_tmpdir: "{{ conf_dir }}/.assembled/{{ inventory_hostname }}"
+    changed_when: no
+
+  - include_tasks: includes/validate.yml
+

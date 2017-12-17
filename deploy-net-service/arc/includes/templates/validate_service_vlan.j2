@@ -1,0 +1,12 @@
+---
+show_vlan:
+ vlans:
+{% for cl, cldata in services|dictsort %}
+{%  for vid, vdata in cldata|dictsort %}
+{%   if inventory_hostname in vdata.nodes %}
+  {{ vid }}:
+   status: active
+   name: {{ cl }}_SVR
+{%   endif %}
+{%  endfor %}
+{% endfor %}

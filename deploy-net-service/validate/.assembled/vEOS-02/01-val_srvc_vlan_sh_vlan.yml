@@ -1,0 +1,5 @@
+show_vlan:
+ vlans:
+  700:
+   status: active
+   name: JPC_SVR

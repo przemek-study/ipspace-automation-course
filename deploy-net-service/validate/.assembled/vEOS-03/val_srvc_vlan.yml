@@ -1,0 +1,16 @@
+---
+show_vlan:
+ vlans:
+  721:
+   status: active
+   name: BOV_SVR
+  700:
+   status: active
+   name: JPC_SVR
+show_interfaces_trunk:
+ trunks:
+  Ethernet2:
+   allowedVlans:
+    vlanIds:
+     - 721
+     - 700

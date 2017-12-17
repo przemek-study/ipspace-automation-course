@@ -1,0 +1,49 @@
+---
+- name: Generate configs and deploy them to devices
+  hosts: arista
+  connection: local
+
+  vars:
+   conf_dir: "{{ playbook_dir }}/configs"
+
+  tasks:
+
+  - name: Prepare assembly dir var for host
+    set_fact:
+     host_tmpdir: "{{ conf_dir }}/.assembled/{{ inventory_hostname }}"
+    changed_when: no
+
+  - name: Ensure there are no files from previous runs
+    file:
+     path: "{{ host_tmpdir }}"
+     state: absent
+    changed_when: no
+
+  - name: Create dir where assembled configs are stored
+    file:
+     path: "{{ host_tmpdir }}"
+     state: directory
+    changed_when: no
+
+  - name: Generate base configs
+    include_role:
+     name: base
+
+  - name: Generate vlan service configs
+    include_role:
+     name: vlan_service
+
+  - name: Assemble config sections
+    assemble:
+     src: "{{ host_tmpdir }}/"
+     dest: "{{ host_tmpdir }}/assembled.conf"
+    changed_when: no
+
+  - name: Upload config to the devices
+    napalm_install_config:
+     provider: "{{ napalm_provider }}"
+     config_file: "{{ host_tmpdir }}/assembled.conf"
+     commit_changes: yes
+     replace_config: false
+     get_diffs: true
+     diff_file: "{{ host_tmpdir }}/diff"

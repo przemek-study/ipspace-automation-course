@@ -1,0 +1,6 @@
+---
+- name: Base config
+  template:
+   src: "{{ os }}/base.j2"
+   dest: "{{ host_tmpdir }}/01-{{ inventory_hostname }}-node.conf"
+  changed_when: no

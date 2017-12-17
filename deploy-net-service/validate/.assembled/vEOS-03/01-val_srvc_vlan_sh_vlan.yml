@@ -1,0 +1,8 @@
+show_vlan:
+ vlans:
+  721:
+   status: active
+   name: BOV_SVR
+  700:
+   status: active
+   name: JPC_SVR
