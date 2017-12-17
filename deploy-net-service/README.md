@@ -48,3 +48,8 @@ __vlan id__ - dictionary describing particular VLAN. Each vlan has the following
 * __nodes__ - nodes where this VLAN needs to be deployed
 * __protocols__ - procotols that need to advertise this VLAN's IP space
 * __mlag__ - specifies whether MLAGs will be configured in this VLAN
+
+# TODO
+
+* More commands need to be added to the vlan service validator
+* More robus reporting needs to be produced by the custom validation script
