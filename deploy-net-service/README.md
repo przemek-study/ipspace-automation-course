@@ -4,8 +4,8 @@ A set of Ansible playbooks deploying and validating base, and vlan service, conf
 
 # Roles
 
-*base* - Generates base config files using templates to translate node model.
-*vlan_service* - Generates vlan service files using templates to translate service model.
+*base* - Generates base config files using templates to translate node model.  
+*vlan_service* - Generates vlan service files using templates to translate service model.  
 
 # Playbooks
 
