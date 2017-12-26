@@ -1,0 +1,77 @@
+---
+- name: Compliance check for the _service vlan_ config
+  hosts: arista
+  connection: local
+
+  vars:
+   conf_dir: "{{ playbook_dir }}/configs"
+   val_dir: "{{ playbook_dir }}/validate"
+
+  tasks:
+  - name: Prepare debug environment
+    include_tasks: tests/debugging_on.yml
+    when: debug_pb is defined
+
+  - name: Load service definitons
+    include_vars:
+     file: vlan_service.yml
+     name: services
+
+  - name: Prepare assembly dir var for host
+    set_fact:
+     host_valdir: "{{ val_dir }}/.assembled/{{ inventory_hostname }}"
+    changed_when: no
+
+  - name: Ensure there are no files from previous runs
+    file:
+     path: "{{ host_valdir }}"
+     state: absent
+    changed_when: no
+
+  - name: Create dir where assembled validation rules are stored
+    file:
+     path: "{{ host_valdir }}"
+     state: directory
+    changed_when: no
+
+  - name: Generate validation rules
+    include_tasks: includes/val_srv_vlan.yml
+
+  - name: Get outputs for the validation
+    napalm_cli:
+     provider: "{{ napalm_provider }}"
+     args:
+      commands:
+       - show vlan | json
+       - show interfaces trunk | json
+#       - show ip interface | json
+#       - show ip virtual-router | json
+#       - show ip bgp | json
+    register: output
+
+  - name: Load assembled validation rules
+    include_vars:
+     file: "{{ host_valdir }}/val_srvc_vlan.yml"
+     name: val_rules
+
+  - name: Use custom filter to validate configs
+    set_fact:
+     val_report: "{{ output.results | val_srv_vlan(inventory_hostname, val_rules) }}"
+
+  - name: Compliance repot failed
+    fail:
+     msg: "{{ val_report.non_compl_txt | join('\n') }}"
+    when: not val_report.compliant
+
+  - name: Full compliance report
+    debug:
+     var: val_report
+     verbosity: 0
+    when: val_report.compliant
+
+  - name: Debug - Write full compliance report to file
+    copy:
+     content: "{{ val_report | to_nice_json }}"
+     dest: "{{ debug_dir }}/{{ inventory_hostname }}_srvc_vlan_compl_report_{{ tstamp }}"
+    when: debug_pb is defined and val_report.compliant
+

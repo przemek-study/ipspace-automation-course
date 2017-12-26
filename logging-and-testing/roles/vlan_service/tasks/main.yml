@@ -1,0 +1,10 @@
+---
+- name: Load service definitons
+  include_vars:
+   file: vlan_service.yml
+   name: services
+
+- name: Generate service config
+  template:
+   src: "{{ os }}/vlan_service.j2"
+   dest: "{{ host_tmpdir }}/10-{{ inventory_hostname }}-vlan-service.conf"

@@ -1,0 +1,75 @@
+{
+    "changed": false, 
+    "compliance_report": {
+        "complies": true, 
+        "get_bgp_neighbors": {
+            "complies": true, 
+            "extra": [], 
+            "missing": [], 
+            "present": {
+                "global": {
+                    "complies": true, 
+                    "nested": true
+                }
+            }
+        }, 
+        "get_facts": {
+            "complies": true, 
+            "extra": [], 
+            "missing": [], 
+            "present": {
+                "hostname": {
+                    "complies": true, 
+                    "nested": false
+                }
+            }
+        }, 
+        "get_interfaces": {
+            "complies": true, 
+            "extra": [], 
+            "missing": [], 
+            "present": {
+                "Ethernet1": {
+                    "complies": true, 
+                    "nested": true
+                }, 
+                "Ethernet2": {
+                    "complies": true, 
+                    "nested": true
+                }
+            }
+        }, 
+        "get_interfaces_ip": {
+            "complies": true, 
+            "extra": [], 
+            "missing": [], 
+            "present": {
+                "Ethernet1": {
+                    "complies": true, 
+                    "nested": true
+                }, 
+                "Ethernet2": {
+                    "complies": true, 
+                    "nested": true
+                }
+            }
+        }, 
+        "get_lldp_neighbors": {
+            "complies": true, 
+            "extra": [], 
+            "missing": [], 
+            "present": {
+                "Ethernet1": {
+                    "complies": true, 
+                    "nested": false
+                }, 
+                "Ethernet2": {
+                    "complies": true, 
+                    "nested": false
+                }
+            }
+        }, 
+        "skipped": []
+    }, 
+    "failed": false
+}

@@ -1,0 +1,33 @@
+---
+- get_facts:
+   hostname: {{ inventory_hostname }}
+- get_interfaces:
+{% for i, idata in ports.iteritems() %}
+   {{ i }}:
+    description: {{ idata.desc }}
+{% endfor %}
+- get_interfaces_ip:
+{% for i, idata in ports.iteritems() %}
+{%  if idata.ip %}
+   {{ i }}:
+    ipv4:
+     _mode: strict
+     {{ idata.ip.split("/")[0] }}:
+      prefix_length: {{ idata.ip.split("/")[1] }}
+{%  endif %}
+{% endfor %}
+- get_lldp_neighbors:
+{% for i, idata in ports.iteritems() %}
+   {{ i }}:
+    - hostname: {{ idata.peer }}
+{% endfor %}
+{% if ibgp is defined %}
+- get_bgp_neighbors:
+   global:
+    peers:
+{%  for p in ibgp %}
+{% set peer =  ports[p.port] | get_peer_info(hostvars) %}
+     {{ peer.ip }}:
+      is_up: true
+{%  endfor %}
+{% endif %}

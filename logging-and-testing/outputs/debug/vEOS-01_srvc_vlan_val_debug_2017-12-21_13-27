@@ -1,0 +1,4 @@
+{
+    "show interfaces trunk | json": "{\n    \"trunks\": {}\n}\n", 
+    "show vlan | json": "{\n    \"sourceDetail\": \"\",\n    \"vlans\": {\n        \"1\": {\n            \"status\": \"active\",\n            \"name\": \"default\",\n            \"interfaces\": {\n                \"Ethernet3\": {\n                    \"privatePromoted\": false\n                }\n            },\n            \"dynamic\": false\n        }\n    }\n}\n"
+}

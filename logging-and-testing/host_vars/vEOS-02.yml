@@ -1,0 +1,24 @@
+---
+site: ld4
+mgmt: 10.50.0.3/24
+loop: 10.50.255.2
+mc: yes
+rr: no
+ibgp:
+  - { port: Ethernet1 }
+
+ospf: yes
+
+pim:
+  - Ethernet1
+
+ports:
+  Ethernet1: { ip: "10.0.12.2/24", speed: 100full, desc: "vEOS-01 Uplink", ospf: yes, peer: vEOS-01 }
+  Ethernet2: { ip: "", speed: 100full, desc: "vEOS-03 Uplink", ospf: no, peer: vEOS-03 }
+
+trunks:
+  Ethernet2: { native: 4094, allowed: [4094] }
+
+mlag:
+  ip: 10.0.0.1/30
+  port: Ethernet2

@@ -1,0 +1,96 @@
+{
+    "cmds": [
+        {
+            "txt": [
+                {
+                    "trunks": {
+                        "Ethernet2": {
+                            "activeVlans": {
+                                "vlanIds": [
+                                    721, 
+                                    700, 
+                                    4094
+                                ]
+                            }, 
+                            "allowedVlans": {
+                                "vlanIds": [
+                                    721, 
+                                    700, 
+                                    4094
+                                ]
+                            }, 
+                            "forwardingVlans": {
+                                "vlanIds": [
+                                    721, 
+                                    700, 
+                                    4094
+                                ]
+                            }, 
+                            "linkStatus": "trunking", 
+                            "nativeVlan": 4094, 
+                            "portMode": "trunk"
+                        }
+                    }
+                }
+            ], 
+            "valid": true
+        }, 
+        {
+            "txt": [
+                {
+                    "sourceDetail": "", 
+                    "vlans": {
+                        "1": {
+                            "dynamic": false, 
+                            "interfaces": {}, 
+                            "name": "default", 
+                            "status": "active"
+                        }, 
+                        "4094": {
+                            "dynamic": false, 
+                            "interfaces": {
+                                "Cpu": {
+                                    "privatePromoted": false
+                                }, 
+                                "Ethernet2": {
+                                    "privatePromoted": false
+                                }
+                            }, 
+                            "name": "MLAG_VLAN", 
+                            "status": "active"
+                        }, 
+                        "700": {
+                            "dynamic": false, 
+                            "interfaces": {
+                                "Cpu": {
+                                    "privatePromoted": false
+                                }, 
+                                "Ethernet2": {
+                                    "privatePromoted": false
+                                }
+                            }, 
+                            "name": "JPC_SVR", 
+                            "status": "active"
+                        }, 
+                        "721": {
+                            "dynamic": false, 
+                            "interfaces": {
+                                "Cpu": {
+                                    "privatePromoted": false
+                                }, 
+                                "Ethernet2": {
+                                    "privatePromoted": false
+                                }
+                            }, 
+                            "name": "BOV_SVR", 
+                            "status": "active"
+                        }
+                    }
+                }
+            ], 
+            "valid": true
+        }
+    ], 
+    "compliant": true, 
+    "non_compl_txt": []
+}

@@ -1,0 +1,20 @@
+JPC:
+  700:
+    multicast: yes
+    network: 192.168.0.0/25
+    nodes: [vEOS-02, vEOS-03]
+    protocols: [bgp]
+    mlag: yes
+  701:
+    multicast: no
+    network: 192.168.2.0/25
+    nodes: [vEOS-02, vEOS-03]
+    protocols: [bgp]
+    mlag: yes
+BOV:
+  721:
+    multicast: yes
+    network: 192.168.2.0/25
+    nodes: [vEOS-03]
+    protocols: [bgp, ospf]
+    mlag: no

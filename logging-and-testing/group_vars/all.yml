@@ -1,0 +1,26 @@
+---
+sites:
+ ld4: { as: 65001 }
+
+common:
+ ntp:
+  servers:
+   - 10.50.123.1
+   - 10.50.123.2
+ 
+ dns:
+  domain: lab
+  servers:
+   - 10.8.8.8
+   - 10.8.4.4
+ 
+ dhcp:
+  servers:
+  - 10.50.20.100
+  - 10.50.20.101
+ 
+ snmp:
+  community: SNMPCOMM
+  servers:
+   - 10.50.2.100
+   - 10.50.2.101

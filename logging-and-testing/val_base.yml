@@ -1,0 +1,55 @@
+---
+- name: Compliance check for the base config
+  hosts: arista
+  connection: local
+
+  vars:
+   val_dir: "{{ playbook_dir }}/validate"
+
+  tasks:
+  - name: Prepare debug environment
+    include_tasks: tests/debugging_on.yml
+    when: debug_pb is defined
+
+  - name: Prepare assembly dir var for host
+    set_fact:
+     host_valdir: "{{ val_dir }}/.assembled/{{ inventory_hostname }}"
+    changed_when: no
+
+  - name: Ensure there are no files from previous runs
+    file:
+     path: "{{ host_valdir }}"
+     state: absent
+    changed_when: no
+
+  - name: Create dir where assembled validation rules are stored
+    file:
+     path: "{{ host_valdir }}"
+     state: directory
+    changed_when: no
+
+  - name: Generate validation rules
+    include_tasks: includes/val_base.yml
+
+  - name: Use Napalm to automatically validate base config
+    napalm_validate:
+     provider: "{{ napalm_provider }}"
+     validation_file: "{{ host_valdir }}/val_base.yml"
+    register: val_base
+
+  - name: Compliance check failed
+    fail:
+     msg: "{{ val_base.compliance_report }}"
+    when: not val_base.compliance_report.complies
+
+  - name: Full compliance report
+    debug:
+     msg: "{{ val_base.compliance_report }}"
+    when: val_base.compliance_report.complies
+
+  - name: Write report to file if debug is enabled
+    copy:
+     content: "{{ val_base | to_nice_json }}"
+     dest: "{{ debug_dir }}/{{ inventory_hostname }}_base_validation_report_{{ tstamp }}"
+    when: debug_pb is defined
+

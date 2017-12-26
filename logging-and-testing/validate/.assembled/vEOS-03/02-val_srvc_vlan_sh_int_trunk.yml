@@ -1,0 +1,7 @@
+show_interfaces_trunk:
+ trunks:
+  Ethernet2:
+   allowedVlans:
+    vlanIds:
+     - 721
+     - 700

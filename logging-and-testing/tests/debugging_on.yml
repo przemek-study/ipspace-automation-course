@@ -1,0 +1,17 @@
+- name: Get timestamp from the system
+  shell: "date +%Y-%m-%d_%H-%M"
+  register: tstamp
+  changed_when: no
+
+- name: Set variables
+  set_fact:
+   tstamp: "{{ tstamp.stdout }}"
+
+- name: Enable debugging
+  set_fact:
+   debug_dir: "{{ playbook_dir }}/outputs/debug"
+
+- file:
+   path: "{{ debug_dir }}"
+   state: directory
+  delegate_to: localhost

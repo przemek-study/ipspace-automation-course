@@ -1,0 +1,43 @@
+{% for cl, cldata in services|dictsort %}
+{%  for vid, vdata in cldata|dictsort %}
+{%   if inventory_hostname in vdata.nodes %}
+
+vlan {{ vid }}
+ name {{ cl }}_SVR
+
+interface Vlan{{ vid }}
+ description {{ cl }} Server VLAN
+{% if vdata.mlag is defined and vdata.mlag %}
+{% set mlag_master = mlag.ip | ipaddr('1') %}
+{%  if mlag_master == mlag.ip %}
+ ip address {{ vdata.network | ipaddr('2') }}
+{%  else %}
+ ip address {{ vdata.network | ipaddr('3') }}
+{%  endif %}
+ ip virtual-router address {{ vdata.network | ipaddr('1') }}
+{% else %}
+ ip address {{ vdata.network | ipaddr('1') }}
+{%  if vid not in trunks[mlag.port].allowed %}
+interface {{ mlag.port }}
+ switchport trunk allowed vlan add {{ vid }}
+{%  endif %}
+{% endif %}
+{% if vdata.multicast %}
+ ip pim sparse-mode
+{% endif %}
+
+{% if vdata.mlag is defined and vdata.mlag %}
+{%  if vid not in trunks[mlag.port].allowed %}
+interface {{ mlag.port }}
+ switchport trunk allowed vlan add {{ vid }}
+{%  endif %}
+{%  endif %}
+
+{% if 'bgp' in vdata.protocols %}
+router bgp {{ sites[site].as }}
+ network {{ vdata.network }}
+{% endif %}
+
+{%   endif %}
+{%  endfor %}
+{% endfor %}

@@ -1,0 +1,11 @@
+{% set vlans = services | vl_srv_helper('get_vlans', inventory_hostname) %}
+{% if vlans %}
+show_interfaces_trunk:
+ trunks:
+  {{ mlag.port }}:
+   allowedVlans:
+    vlanIds:
+{%  for vid in vlans %}
+     - {{ vid }}
+{%  endfor %}
+{% endif %}

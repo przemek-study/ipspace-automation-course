@@ -1,0 +1,22 @@
+@@ -23,6 +23,9 @@
+ !
+ username ******** secret sha512 $6$gO9h0lHcKRf2Pvj5$A.FV8w308rLXCvHuhm32IqSm4gQr0NaQnNCNBKe81JnrZ6algflocOTZMI6xX4WIxHc.LrMYXQjopUYiwdOei1
+ !
++vlan 700
++   name JPC_SVR
++!
+ vlan 4094
+    name MLAG_VLAN
+ !
+@@ -45,6 +48,11 @@
+ !
+ interface Management1
+    ip address 10.50.0.3/24
++!
++interface Vlan700
++   description JPC Server VLAN
++   ip address 192.168.0.2/25
++   ip virtual-router address 192.168.0.1/25
+ !
+ interface Vlan4094
+    description vEOS-02_vEOS-03 MLAG

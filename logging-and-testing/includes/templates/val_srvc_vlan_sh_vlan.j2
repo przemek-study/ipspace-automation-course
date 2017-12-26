@@ -1,0 +1,10 @@
+{% set vlans = services | vl_srv_helper('get_vlans', inventory_hostname) %}
+{% if vlans %}
+show_vlan:
+ vlans:
+{%  for vid, cl in vlans.iteritems() %}
+  {{ vid }}:
+   status: active
+   name: {{ cl }}_SVR
+{%  endfor %}
+{% endif %}

@@ -1,0 +1,115 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+   rsrvd_vids: [0,1,1002,1003,1004,1005,4095]
+   valid_atts: ['multicast', 'network', 'nodes', 'protocols', 'mlag']
+
+  tasks:
+  - include_vars:
+     file: "{{ vlsrvc }}"
+     name: vlans
+    register: test
+
+# Validate Main service Keys
+
+  - name: Get a list of all vlan IDs
+    set_fact:
+     vlan_ids: "{{ vlans | json_query('*.keys(@)[]') }}"
+
+  - name: Check for duplicate VIDs
+    assert:
+     that: "{{ vlan_ids | length == vlan_ids | unique | length }}"
+     msg: "Duplicate VID found"
+
+  - name: Check for invalid VIDs
+    assert:
+     that: "{{ item | int }}"
+     msg: "Non-integer VID found"
+    with_items: "{{ vlan_ids }}"
+
+  - name: Check for reserved VIDs
+    assert:
+     that: "{{ item not in rsrvd_vids }}"
+     msg: "A system reserved VID found"
+    with_items: "{{ vlan_ids }}"
+
+#################################################
+# Validate attributes for each service instance #
+#################################################
+
+  - name: Get a list of all attributes
+    set_fact:
+     all_atts: "{{ vlans | json_query('*.*.keys(@)') }}"
+
+  - name: Check names and number of attributes
+    assert:
+     that: "{{ not item | difference(valid_atts) | length }}"
+     msg: "Found wrong number of attributes or invalid attribute name."
+    with_items: "{{ all_atts }}"
+
+######################################
+### Validate individual attributes ###
+######################################
+
+### Validate Network addresses ###
+
+  - name: Get a list of all network IPs
+    set_fact:
+     network_ips: "{{ vlans | json_query('*.*.network[]') }}"
+
+  - name: Validate network addresses
+    assert:
+     that: "{{ item | ipv4 != False }}"
+     msg: "Incorrect network address found"
+    with_items: "{{ network_ips }}"
+    
+  - name: Check if there are duplicate networks
+    assert:
+     that: "{{ network_ips | length == network_ips | unique | length }}"
+     msg: "Duplicate network address found"
+    ignore_errors: False
+
+  - name: Check if there are overlapping networks
+    assert:
+     that: "{{ not network_ips | ip_overlap(item) }}"
+     msg: "Overlapping network addresses found"
+    with_items: "{{ network_ips }}"
+
+### Validate nodes attribute ###
+
+  - name: Get a list of all nodes
+    set_fact:
+     nodes: "{{ vlans | json_query('*.*[].nodes[]') | unique }}"
+
+  - name: Check if node hostnames are in inventory
+    assert:
+     that: "{{ item in groups.all }}"
+     msg: "Node not in inventory"
+    with_items: "{{ nodes  }}"
+
+### Validate multicast attribute ###
+
+  - name: Get values of *multicast* attribute
+    set_fact:
+     mc_vals: "{{ vlans | json_query('*.*.multicast[]') | unique }}"
+
+  - name: Check if *multicast* attribute has valid value
+    assert:
+     that: "{{ item | type_debug == 'bool' }}"
+     msg: "Invalid value of the *multicast* attribute"
+    with_items: "{{ mc_vals }}"
+
+### Validate mlag attribute ###
+
+  - name: Get values of *mlag* attribute
+    set_fact:
+     mlag_vals: "{{ vlans | json_query('*.*.mlag[]') | unique }}"
+
+  - name: Check if *mlag* attribute has valid value
+    assert:
+     that: "{{ item | type_debug == 'bool' }}"
+     msg: "Invalid value of the *mlag* attribute"
+    with_items: "{{ mlag_vals }}"

@@ -1,0 +1,12 @@
+---
+show_vlan:
+ vlans:
+  700:
+   status: active
+   name: JPC_SVR
+show_interfaces_trunk:
+ trunks:
+  Ethernet2:
+   allowedVlans:
+    vlanIds:
+     - 700
