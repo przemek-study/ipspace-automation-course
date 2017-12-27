@@ -1,0 +1,28 @@
+Running VLAN Service model validation unit testing
+-> Validating known correct VLAN Service model
+
+== Initial test PASS, proceeding ==
+
+-> Validating model testing/bad-models/bad-vlsrvc-duplicate-vids.yml
+ .. model validation failed as expected
+-> Validating model testing/bad-models/bad-vlsrvc-extra-attribute.yml
+ .. model validation failed as expected
+-> Validating model testing/bad-models/bad-vlsrvc-invalid-attribute.yml
+ .. model validation failed as expected
+-> Validating model testing/bad-models/bad-vlsrvc-invalid-vid.yml
+ .. model validation failed as expected
+-> Validating model testing/bad-models/bad-vlsrvc-mcast-wrong-value.yml
+ .. model validation failed as expected
+-> Validating model testing/bad-models/bad-vlsrvc-mlag-wrong-value.yml
+ .. model validation failed as expected
+-> Validating model testing/bad-models/bad-vlsrvc-net-duplicate.yml
+ .. model validation failed as expected
+-> Validating model testing/bad-models/bad-vlsrvc-net-invalid.yml
+ .. model validation failed as expected
+-> Validating model testing/bad-models/bad-vlsrvc-net-overlap.yml
+ .. model validation failed as expected
+-> Validating model testing/bad-models/bad-vlsrvc-node-not-in-hosts.yml
+ .. model validation failed as expected
+
+^_^ Validation process completed successfully ^_^
+

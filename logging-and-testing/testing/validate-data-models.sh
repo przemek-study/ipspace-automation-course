@@ -18,7 +18,7 @@ if [ ! -f hosts ]; then
 fi
 
 echo "-> Validating known correct VLAN Service model"
-ansible-playbook validate-vlan-srvc-data-model.yml -e vlsrvc=srvc-vlan-model-correct.yml >/dev/null 2>/dev/null
+ansible-playbook validate-vlan-srvc-data-model.yml -e vlsrvc=testing/srvc-vlan-model-correct.yml >/dev/null 2>/dev/null
 
 # ? - holds the exit code
 if [ $? -ne 0 ]; then

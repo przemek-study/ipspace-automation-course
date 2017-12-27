@@ -9,7 +9,7 @@
 
   tasks:
   - name: Prepare debug environment
-    include_tasks: tests/debugging_on.yml
+    include_tasks: testing/debugging_on.yml
     when: debug_pb is defined
 
   - name: Load service definitons
